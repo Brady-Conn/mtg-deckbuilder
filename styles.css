@@ -1,11 +1,20 @@
 .head {
+    justify-content: center;
     background-image: url("mtg-background.png");
     background-size: 100%;
-    height: 700px;
+    display: flex;
+    height: 500px;
     width: 100%;
     margin: 0px;
 }
 
 body {
     margin: 0px;
+}
+
+.main-title {
+    font-size: 100px;
+    color: white;
+    margin-top: 200px;
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
 }

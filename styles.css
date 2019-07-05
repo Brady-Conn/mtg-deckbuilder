@@ -18,3 +18,42 @@ body {
     margin-top: 200px;
     text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
 }
+
+.set-selection {
+    margin: 10px;
+    width: 20%;
+    border: solid black;
+    height: 200px;
+}
+
+.main-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-display {
+    margin: 10px;
+    width: 50%;
+    border: solid black;
+    height: 500px;
+}
+
+.deck-contents {
+    margin: 10px;
+    width: 20%;
+    border: solid black;
+    height: 200px;
+}
+
+.tool-bar {
+    height: 75px;
+    display: flex;
+    justify-content: center;
+}
+
+.tool-button {
+    margin: 10px;
+    background-color: black;
+    color: white;
+    font-size: 16px;
+}

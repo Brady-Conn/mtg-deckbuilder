@@ -34,10 +34,12 @@ body {
 }
 
 .card-display {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
     margin: 10px;
     width: 50%;
     border: solid black;
-    height: 500px;
 }
 
 .deck-contents {
@@ -83,4 +85,11 @@ body {
 .set-container {
     display: flex;
     flex-direction: row;
+}
+
+.card {
+    background-size: 100%;
+    width: 227px;
+    height: 317px;
+    margin: 4px;
 }

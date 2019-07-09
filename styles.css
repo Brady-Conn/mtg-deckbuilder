@@ -93,3 +93,20 @@ body {
     height: 317px;
     margin: 4px;
 }
+
+.nav-bar {
+    display: flex;
+    justify-content: center;
+}
+
+.previous {
+    margin-right: 250px;
+}
+
+.page-count {
+    margin-right: 280px;
+}
+
+.next {
+    
+}

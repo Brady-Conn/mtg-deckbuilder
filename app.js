@@ -28,15 +28,51 @@ if(localStorage.getItem('mh3') === null){
     })
 }
 
+let modernHorizons = JSON.parse(localStorage.getItem('mh1'))
+let mh2 = JSON.parse(localStorage.getItem('mh2'))
+let mh3 = JSON.parse(localStorage.getItem('mh3'))
+modernHorizons = modernHorizons.cards.concat(mh2.cards).concat(mh3.cards)
 $( document ).ready(function() {
   if ($('.page-count').text() === 'Page:'){
-    $('.page-count').text('Page: 1 of 3');
-    let mh1 = JSON.parse(localStorage.getItem('mh1'))
-    mh1.cards.forEach(card => {
+    $('.page-count').text('Page: 1 of 10');
+    var pageNumber = 1;
+    for (let i = 0; i < 25; i += 1) {
       let $card = $('<div class="card"></div>')
-      let image = card.imageUrl
+      let image = modernHorizons[i].imageUrl
       $card.css('background-image', 'url(' + image + ')')
       $('.card-display').append($card)
-    })
+    }
   }
+
+  $('.next').click(function() {
+    if (pageNumber === 10){
+      return;
+    }
+    let i = pageNumber * 25;
+    $('.card-display').html('');
+    for( i; i < pageNumber * 25 + 25; i += 1) {
+      let $card = $('<div class="card"></div>')
+      let image = modernHorizons[i].imageUrl
+      $card.css('background-image', 'url(' + image + ')')
+      $('.card-display').append($card)
+    }
+    pageNumber += 1;
+    $('.page-count').text('Page: ' + pageNumber + ' of 10')
+  })
+
+  $('.previous').click(function() {
+    if (pageNumber === 1){
+      return;
+    }
+    let i = pageNumber * 25 - 50;
+    $('.card-display').html('');
+    for( i; i < pageNumber * 25; i += 1) {
+      let $card = $('<div class="card"></div>')
+      let image = modernHorizons[i].imageUrl
+      $card.css('background-image', 'url(' + image + ')')
+      $('.card-display').append($card)
+    }
+    pageNumber -= 1;
+    $('.page-count').text('Page: ' + pageNumber + ' of 10')
+  })
 });

@@ -40,6 +40,7 @@ $( document ).ready(function() {
       let $card = $('<div class="card"></div>')
       let image = modernHorizons[i].imageUrl
       $card.css('background-image', 'url(' + image + ')')
+      $card.attr('id', modernHorizons[i].name)
       $('.card-display').append($card)
     }
   }
@@ -54,6 +55,7 @@ $( document ).ready(function() {
       let $card = $('<div class="card"></div>')
       let image = modernHorizons[i].imageUrl
       $card.css('background-image', 'url(' + image + ')')
+      $card.attr('id', modernHorizons[i].name)
       $('.card-display').append($card)
     }
     pageNumber += 1;
@@ -66,13 +68,22 @@ $( document ).ready(function() {
     }
     let i = pageNumber * 25 - 50;
     $('.card-display').html('');
-    for( i; i < pageNumber * 25; i += 1) {
+    for ( i; i < pageNumber * 25; i += 1) {
       let $card = $('<div class="card"></div>')
       let image = modernHorizons[i].imageUrl
       $card.css('background-image', 'url(' + image + ')')
+      $card.attr('id', modernHorizons[i].name)
       $('.card-display').append($card)
     }
     pageNumber -= 1;
     $('.page-count').text('Page: ' + pageNumber + ' of 10')
+  })
+
+  $(document).on('click', '.card', function() {
+    console.log('clicked')
+    let $cardName = $('<div class="card-in-deck"></div>');
+    let name = $(this).attr('id');
+    $cardName.text(name)
+    $('.deck-contents').append($cardName)
   })
 });

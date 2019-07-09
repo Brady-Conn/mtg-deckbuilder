@@ -32,6 +32,8 @@ let modernHorizons = JSON.parse(localStorage.getItem('mh1'))
 let mh2 = JSON.parse(localStorage.getItem('mh2'))
 let mh3 = JSON.parse(localStorage.getItem('mh3'))
 modernHorizons = modernHorizons.cards.concat(mh2.cards).concat(mh3.cards)
+let sessionDeck;
+
 $( document ).ready(function() {
   if ($('.page-count').text() === 'Page:'){
     $('.page-count').text('Page: 1 of 10');
@@ -80,10 +82,28 @@ $( document ).ready(function() {
   })
 
   $(document).on('click', '.card', function() {
-    console.log('clicked')
+    if(sessionDeck === undefined){
+      sessionDeck = {};
+    } else {
+      sessionDeck = JSON.parse(sessionStorage.getItem('sessionDeck'));
+    }
     let $cardName = $('<div class="card-in-deck"></div>');
-    let name = $(this).attr('id');
-    $cardName.text(name)
+    let name = $(this).attr('id').replace(/\s/g, '-');
+    if(sessionDeck.hasOwnProperty(name)){
+      console.log('here')
+      if(sessionDeck[name][1] < 4){
+        sessionDeck[name][1] += 1;
+        let $id = $('#' + name) 
+        console.log($id)
+        $id.text(name + ' x' + sessionDeck[name][1])
+        sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
+      }
+    } else {
+    sessionDeck[name] = [$(this).css('background-image'), 1]
+    sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
+    $cardName.attr('id', name)
+    $cardName.text(name + ' x' + sessionDeck[name][1])
     $('.deck-contents').append($cardName)
+    }
   })
 });

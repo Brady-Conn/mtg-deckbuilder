@@ -128,7 +128,7 @@ $( document ).ready(function() {
     let $plus = $('<button class="plus">+</button>');
     let $minus = $('<button class="minus">-</button>');
     let name = $(this).attr('id')
-    if(sessionDeck.hasOwnProperty(name)){
+    if(sessionDeck[name]){
       if (name.split(' ').includes('Forest') || name.split(' ').includes('Mountain') || name.split(' ').includes('Island') || name.split(' ').includes('Swamp') || name.split(' ').includes('Plains')) {
         sessionDeck[name].quantity += 1;
         let $id = $('#' + sessionDeck[name].id);
@@ -179,9 +179,11 @@ $( document ).ready(function() {
     }
     if (sessionDeck[name].quantity === 1) {
       let $plusId = document.getElementById('plus-' + $(this).attr('id').slice(6,7) + name);
+      let $cardId = document.getElementById(name)
       $('#' + id).remove();
       $plusId.remove();
       $(this).remove(); 
+      $cardId.remove()
       delete sessionDeck[name]
       sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
       if (activeDeck !== undefined) {
@@ -227,7 +229,7 @@ $( document ).ready(function() {
       activeDeck = deckCounter;
       $newDeck.css('background-color', '#42d4f5')
     } else if (activeDeck !== undefined) {
-      localStorage.setItem('Deck-' + deckCounter, JSON.stringify(sessionDeck));
+      localStorage.setItem('Deck-' + activeDeck, JSON.stringify(sessionDeck));
       return
     } else {
       $newDeck.addClass('Deck');
@@ -290,10 +292,80 @@ $( document ).ready(function() {
     }
   })
 
-  $(document).on('click', '.delete-deck', function() {
+  $(document).on('click', '#delete-deck', function() {
     if (activeDeck === undefined){
       return
     }
+    let affirm = confirm('Are you sure you want to delete Deck-' + activeDeck)
+    if(affirm === true){
+      localStorage.removeItem('Deck-' + activeDeck);
+      sessionStorage.clear();
+      sessionDeck = undefined;
+      $('#D' + activeDeck).remove()
+      activeDeck = undefined;
+      deckCounter -= 1;
+      $('.card-display').html('');
+      $('.add').html('');
+      $('.subtract').html('');
+      $('.name-and-quantity').html('');
+      $('.page-count').text('Page: 1 of 10');
+      $('.previous').text('Previous');
+      $('.next').text('Next');
+      pageNumber = 1;
+      for (let i = 0; i < 25; i += 1) {
+        let $card = $('<div class="card"></div>')
+        let image = modernHorizons[i].imageUrl
+        $card.css('background-image', 'url(' + image + ')')
+        $card.attr('id', modernHorizons[i].name)
+        $('.card-display').append($card)
+      }
+    }
+  })
+
+  $(document).on('click', '#new-deck', function() {
+    if($('.Deck').length > 3){
+      alert('You many only save up to four decks')
+      return
+    }
+    let $newDeck = $('<div></div>');
+    sessionStorage.clear();
+    sessionDeck = undefined;
+    activeDeck = $('.Deck').length + 1
+    $('.card-display').html('');
+    $('.add').html('');
+    $('.subtract').html('');
+    $('.name-and-quantity').html('');
+    $('.page-count').text('Page: 1 of 10');
+    $('.previous').text('Previous');
+    $('.next').text('Next');
+    pageNumber = 1;
+    for (let i = 0; i < 25; i += 1) {
+      let $card = $('<div class="card"></div>')
+      let image = modernHorizons[i].imageUrl
+      $card.css('background-image', 'url(' + image + ')')
+      $card.attr('id', modernHorizons[i].name)
+      $('.card-display').append($card)
+    }
+    if (deckCounter === undefined || deckCounter === 0){
+      $newDeck.addClass('Deck');
+      $newDeck.text('Deck-1');
+      deckCounter = 1;
+      $newDeck.attr('id', 'D' + deckCounter)
+      activeDeck = deckCounter;
+      $newDeck.css('background-color', '#42d4f5')
+    } else if (activeDeck !== undefined) {
+      localStorage.setItem('Deck-' + activeDeck, JSON.stringify(sessionDeck));
+      return
+    } else {
+      $newDeck.addClass('Deck');
+      $newDeck.attr('id', deckCounter)
+      $newDeck.text('Deck-' + deckCounter);
+      $newDeck.css('background-color', '#42d4f5')
+      deckCounter += 1;
+      activeDeck = deckCounter;
+    }
     
+    $('.my-decks').append($newDeck);
+    localStorage.setItem('Deck-' + deckCounter, JSON.stringify(sessionDeck))
   })
 })

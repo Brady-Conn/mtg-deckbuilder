@@ -37,6 +37,7 @@ let deckCounter;
 let activeDeck;
 
 $( document ).ready(function() {
+  sessionStorage.clear()
   if ($('.page-count').text() === 'Page:'){
     $('.page-count').text('Page: 1 of 10');
     var pageNumber = 1;
@@ -48,6 +49,40 @@ $( document ).ready(function() {
       $('.card-display').append($card)
     }
   }
+
+  if (localStorage.getItem('Deck-1') !== null) {
+    let $newDeck = $('<div></div>');
+    $newDeck.addClass('Deck');
+    $newDeck.attr('id', 'D1')
+    $newDeck.text('Deck-1');
+    $('.my-decks').append($newDeck);
+  }
+
+  if (localStorage.getItem('Deck-2') !== null) {
+    let $newDeck = $('<div></div>');
+    $newDeck.addClass('Deck');
+    $newDeck.attr('id', 'D2')
+    $newDeck.text('Deck-2');
+    $('.my-decks').append($newDeck);
+  }
+
+  if (localStorage.getItem('Deck-3') !== null) {
+    let $newDeck = $('<div></div>');
+    $newDeck.addClass('Deck');
+    $newDeck.attr('id', 'D3')
+    $newDeck.text('Deck-3');
+    $('.my-decks').append($newDeck);
+  }
+
+  if (localStorage.getItem('Deck-4') !== null) {
+    let $newDeck = $('<div></div>');
+    $newDeck.addClass('Deck');
+    $newDeck.attr('id', 'D4')
+    $newDeck.text('Deck-4');
+    $('.my-decks').append($newDeck);
+  }
+
+  deckCounter = $('.Deck').length
 
   $('.next').click(function() {
     if (pageNumber === 10){
@@ -84,7 +119,6 @@ $( document ).ready(function() {
   })
 
   $(document).on('click', '.card', function() {
-    console.log('add-card')
     if(sessionDeck === undefined){
       sessionDeck = {};
     } else {
@@ -95,12 +129,14 @@ $( document ).ready(function() {
     let $minus = $('<button class="minus">-</button>');
     let name = $(this).attr('id')
     if(sessionDeck.hasOwnProperty(name)){
-      console.log('if')
       if (name.split(' ').includes('Forest') || name.split(' ').includes('Mountain') || name.split(' ').includes('Island') || name.split(' ').includes('Swamp') || name.split(' ').includes('Plains')) {
         sessionDeck[name].quantity += 1;
         let $id = $('#' + sessionDeck[name].id);
         $id.text(name + ' x' + sessionDeck[name].quantity)
         sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
+        if (activeDeck !== undefined) {
+          localStorage.setItem('Deck-' + activeDeck, JSON.stringify(sessionDeck));
+        }
         return
       }
       if(sessionDeck[name].quantity < 4){
@@ -108,9 +144,11 @@ $( document ).ready(function() {
         let $id = $('#' + sessionDeck[name].id) 
         $id.text(name + ' x' + sessionDeck[name].quantity)
         sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
+        if (activeDeck !== undefined) {
+          localStorage.setItem('Deck-' + activeDeck, JSON.stringify(sessionDeck));
+        }
       }
     } else {
-      console.log('else')
     let cardId = Object.keys(sessionDeck).length + 1;
     sessionDeck[name] = {picture: $(this).css('background-image'), quantity: 1, name: name, id: cardId};
     sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
@@ -121,6 +159,9 @@ $( document ).ready(function() {
     $('.name-and-quantity').append($cardName)
     $('.subtract').append($minus);
     $('.add').append($plus);
+    if (activeDeck !== undefined) {
+      localStorage.setItem('Deck-' + activeDeck, JSON.stringify(sessionDeck));
+    }
     }
   })
 
@@ -132,6 +173,9 @@ $( document ).ready(function() {
     let $id = $('#' + sessionDeck[name].id);
     $id.text(name + ' x' + sessionDeck[name].quantity)
     sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
+    if (activeDeck !== undefined) {
+      localStorage.setItem('Deck-' + activeDeck, JSON.stringify(sessionDeck));
+    }
     }
     if (sessionDeck[name].quantity === 1) {
       let $plusId = document.getElementById('plus-' + $(this).attr('id').slice(6,7) + name);
@@ -140,6 +184,9 @@ $( document ).ready(function() {
       $(this).remove(); 
       delete sessionDeck[name]
       sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
+      if (activeDeck !== undefined) {
+        localStorage.setItem('Deck-' + activeDeck, JSON.stringify(sessionDeck));
+      }
     }
   })
 
@@ -151,6 +198,9 @@ $( document ).ready(function() {
       let $id = $('#' + sessionDeck[name].id);
       $id.text(name + ' x' + sessionDeck[name].quantity)
       sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
+      if (activeDeck !== undefined) {
+        localStorage.setItem('Deck-' + activeDeck, JSON.stringify(sessionDeck));
+      }
       return
     }
     if (sessionDeck[name].quantity < 4) {
@@ -158,11 +208,16 @@ $( document ).ready(function() {
     let $id = $('#' + sessionDeck[name].id);
     $id.text(name + ' x' + sessionDeck[name].quantity)
     sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
+    if (activeDeck !== undefined) {
+      localStorage.setItem('Deck-' + activeDeck, JSON.stringify(sessionDeck));
+    }
     }
   })
 
   $(document).on('click', '#save-deck', function() {
-    console.log('save-deck')
+    if (sessionDeck === undefined){
+      return;
+    }
     let $newDeck = $('<div></div>');
     if (deckCounter === undefined || deckCounter === 0){
       $newDeck.addClass('Deck');
@@ -170,13 +225,15 @@ $( document ).ready(function() {
       deckCounter = 1;
       $newDeck.attr('id', 'D' + deckCounter)
       activeDeck = deckCounter;
-    } else if (deckCounter === activeDeck) {
+      $newDeck.css('background-color', '#42d4f5')
+    } else if (activeDeck !== undefined) {
       localStorage.setItem('Deck-' + deckCounter, JSON.stringify(sessionDeck));
       return
     } else {
       $newDeck.addClass('Deck');
       $newDeck.attr('id', deckCounter)
       $newDeck.text('Deck-' + deckCounter);
+      $newDeck.css('background-color', '#42d4f5')
       deckCounter += 1;
       activeDeck = deckCounter;
     }
@@ -186,20 +243,42 @@ $( document ).ready(function() {
   })
 
   $(document).on('click', '.Deck', function() {
+    $('.previous').text('');
+    $('.next').text('');
+    $('.page-count').text($(this).text())
     let deckNumber = $(this).attr('id').slice(1);
+    $('.Deck').css('background-color', '#ffffff')
+    $(this).css('background-color', '#42d4f5')
+    activeDeck = deckNumber;
     sessionDeck = JSON.parse(localStorage.getItem('Deck-' + deckNumber));
-    $('.card-display').html('')
+    sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
+    $('.card-display').html('');
+    $('.add').html('');
+    $('.subtract').html('');
+    $('.name-and-quantity').html('');
     for (key in sessionDeck) {
+      let $cardName = $('<div class="card-in-deck"></div>');
+      let $plus = $('<button class="plus">+</button>');
+      let $minus = $('<button class="minus">-</button>');
       let $card = $('<div class="card"></div>')
+      $cardName.attr('id', sessionDeck[key].id)
+      $minus.attr('id', 'minus-' + sessionDeck[key].id +  sessionDeck[key].name);
+      $plus.attr('id', 'plus-' + sessionDeck[key].id +  sessionDeck[key].name);
       $card.css('background-image', sessionDeck[key].picture);
       $card.attr('id', sessionDeck[key].name)
+      $cardName.text(sessionDeck[key].name + ' x' + sessionDeck[key].quantity)
       $('.card-display').append($card)
+      $('.name-and-quantity').append($cardName);
+      $('.add').append($plus);
+      $('.subtract').append($minus)
     }
     sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
   })
 
   $(document).on('click', '.set-name', function() {
     $('.page-count').text('Page: 1 of 10');
+    $('.previous').text('Previous');
+    $('.next').text('Next');
     pageNumber = 1;
     $('.card-display').html('');
     for (let i = 0; i < 25; i += 1) {
@@ -209,5 +288,12 @@ $( document ).ready(function() {
       $card.attr('id', modernHorizons[i].name)
       $('.card-display').append($card)
     }
+  })
+
+  $(document).on('click', '.delete-deck', function() {
+    if (activeDeck === undefined){
+      return
+    }
+    
   })
 })

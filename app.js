@@ -197,4 +197,17 @@ $( document ).ready(function() {
     }
     sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
   })
+
+  $(document).on('click', '.set-name', function() {
+    $('.page-count').text('Page: 1 of 10');
+    pageNumber = 1;
+    $('.card-display').html('');
+    for (let i = 0; i < 25; i += 1) {
+      let $card = $('<div class="card"></div>')
+      let image = modernHorizons[i].imageUrl
+      $card.css('background-image', 'url(' + image + ')')
+      $card.attr('id', modernHorizons[i].name)
+      $('.card-display').append($card)
+    }
+  })
 })

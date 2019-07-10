@@ -33,6 +33,8 @@ let mh2 = JSON.parse(localStorage.getItem('mh2'))
 let mh3 = JSON.parse(localStorage.getItem('mh3'))
 modernHorizons = modernHorizons.cards.concat(mh2.cards).concat(mh3.cards)
 let sessionDeck;
+let deckCounter;
+let activeDeck;
 
 $( document ).ready(function() {
   if ($('.page-count').text() === 'Page:'){
@@ -82,7 +84,6 @@ $( document ).ready(function() {
   })
 
   $(document).on('click', '.card', function() {
-    console.log('clicked')
     if(sessionDeck === undefined){
       sessionDeck = {};
     } else {
@@ -155,5 +156,26 @@ $( document ).ready(function() {
     $id.text(name + ' x' + sessionDeck[name].quantity)
     sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
     }
+  })
+
+  $('#save-deck').click(function() {
+    let $newDeck = $('<div></div>');
+    if (deckCounter === undefined || deckCounter === 0){
+      $newDeck.addClass('Deck-1');
+      $newDeck.text('Deck-1');
+      deckCounter = 1;
+      activeDeck = deckCounter;
+    } else if (deckCounter === activeDeck) {
+      localStorage.setItem('Deck-' + deckCounter, JSON.stringify(sessionDeck));
+      return
+    } else {
+      $newDeck.addClass('Deck-' + deckCounter);
+      $newDeck.text('Deck-' + deckCounter);
+      deckCounter += 1;
+      activeDeck = deckCounter;
+    }
+    
+    $('.my-decks').append($newDeck);
+    localStorage.setItem('Deck-' + deckCounter, JSON.stringify(sessionDeck))
   })
 });

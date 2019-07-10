@@ -24,7 +24,6 @@ body {
     flex-direction: column;
     margin: 10px;
     width: 20%;
-    border: solid black;
     height: 100%;
 }
 
@@ -129,3 +128,4 @@ body {
     flex-direction: column;
     width: 75%
 }
+

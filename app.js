@@ -84,6 +84,7 @@ $( document ).ready(function() {
   })
 
   $(document).on('click', '.card', function() {
+    console.log('add-card')
     if(sessionDeck === undefined){
       sessionDeck = {};
     } else {
@@ -94,6 +95,7 @@ $( document ).ready(function() {
     let $minus = $('<button class="minus">-</button>');
     let name = $(this).attr('id')
     if(sessionDeck.hasOwnProperty(name)){
+      console.log('if')
       if (name.split(' ').includes('Forest') || name.split(' ').includes('Mountain') || name.split(' ').includes('Island') || name.split(' ').includes('Swamp') || name.split(' ').includes('Plains')) {
         sessionDeck[name].quantity += 1;
         let $id = $('#' + sessionDeck[name].id);
@@ -108,6 +110,7 @@ $( document ).ready(function() {
         sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
       }
     } else {
+      console.log('else')
     let cardId = Object.keys(sessionDeck).length + 1;
     sessionDeck[name] = {picture: $(this).css('background-image'), quantity: 1, name: name, id: cardId};
     sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
@@ -141,7 +144,7 @@ $( document ).ready(function() {
   })
 
   $(document).on('click', '.plus', function() {
-    let id = $(this).attr('id').slice(5, 6)
+    let id = $(this).attr('id').slice(5, 6);
     let name = $(this).attr('id').slice(6);
     if (name.split(' ').includes('Forest') || name.split(' ').includes('Mountain') || name.split(' ').includes('Island') || name.split(' ').includes('Swamp') || name.split(' ').includes('Plains')) {
       sessionDeck[name].quantity += 1;
@@ -158,18 +161,21 @@ $( document ).ready(function() {
     }
   })
 
-  $('#save-deck').click(function() {
+  $(document).on('click', '#save-deck', function() {
+    console.log('save-deck')
     let $newDeck = $('<div></div>');
     if (deckCounter === undefined || deckCounter === 0){
-      $newDeck.addClass('Deck-1');
+      $newDeck.addClass('Deck');
       $newDeck.text('Deck-1');
       deckCounter = 1;
+      $newDeck.attr('id', 'D' + deckCounter)
       activeDeck = deckCounter;
     } else if (deckCounter === activeDeck) {
       localStorage.setItem('Deck-' + deckCounter, JSON.stringify(sessionDeck));
       return
     } else {
-      $newDeck.addClass('Deck-' + deckCounter);
+      $newDeck.addClass('Deck');
+      $newDeck.attr('id', deckCounter)
       $newDeck.text('Deck-' + deckCounter);
       deckCounter += 1;
       activeDeck = deckCounter;
@@ -178,4 +184,17 @@ $( document ).ready(function() {
     $('.my-decks').append($newDeck);
     localStorage.setItem('Deck-' + deckCounter, JSON.stringify(sessionDeck))
   })
-});
+
+  $(document).on('click', '.Deck', function() {
+    let deckNumber = $(this).attr('id').slice(1);
+    sessionDeck = JSON.parse(localStorage.getItem('Deck-' + deckNumber));
+    $('.card-display').html('')
+    for (key in sessionDeck) {
+      let $card = $('<div class="card"></div>')
+      $card.css('background-image', sessionDeck[key].picture);
+      $card.attr('id', sessionDeck[key].name)
+      $('.card-display').append($card)
+    }
+    sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
+  })
+})

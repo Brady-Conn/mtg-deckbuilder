@@ -42,7 +42,7 @@ body {
     border: solid black;
 }
 
-.deck-contents {
+.deck-container {
     margin: 10px;
     width: 20%;
     border: solid black;
@@ -107,6 +107,25 @@ body {
     margin-right: 280px;
 }
 
-.next {
-    
+.deck-contents {
+    display: flex;
+    justify-content: space-around;
+}
+
+.add {
+    display: flex;
+    flex-direction: column;
+    width: 10%;
+}
+
+.subtract {
+    display: flex;
+    flex-direction: column;
+    width: 10%;
+}
+
+.name-and-quantity {
+    display: flex;
+    flex-direction: column;
+    width: 75%
 }

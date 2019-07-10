@@ -88,22 +88,47 @@ $( document ).ready(function() {
       sessionDeck = JSON.parse(sessionStorage.getItem('sessionDeck'));
     }
     let $cardName = $('<div class="card-in-deck"></div>');
-    let name = $(this).attr('id').replace(/\s/g, '-');
+    let $plus = $('<button class="plus">+</button>');
+    let $minus = $('<button class="minus">-</button>');
+    let name = $(this).attr('id')
     if(sessionDeck.hasOwnProperty(name)){
-      console.log('here')
-      if(sessionDeck[name][1] < 4){
-        sessionDeck[name][1] += 1;
-        let $id = $('#' + name) 
-        console.log($id)
-        $id.text(name + ' x' + sessionDeck[name][1])
+      if(sessionDeck[name].quantity < 4){
+        sessionDeck[name].quantity += 1;
+        let $id = $('#' + sessionDeck[name].id) 
+        $id.text(name + ' x' + sessionDeck[name].quantity)
         sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
       }
     } else {
-    sessionDeck[name] = [$(this).css('background-image'), 1]
+    let cardId = Object.keys(sessionDeck).length + 1;
+    sessionDeck[name] = {picture: $(this).css('background-image'), quantity: 1, name: name, id: cardId};
     sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
-    $cardName.attr('id', name)
-    $cardName.text(name + ' x' + sessionDeck[name][1])
-    $('.deck-contents').append($cardName)
+    $cardName.attr('id', cardId)
+    $minus.attr('id', 'minus-' + cardId +  name);
+    $plus.attr('id', 'plus-' + cardId + name);
+    $cardName.text(name + ' x' + sessionDeck[name].quantity)
+    $('.name-and-quantity').append($cardName)
+    $('.subtract').append($minus);
+    $('.add').append($plus);
+    }
+  })
+
+  $(document).on('click', '.minus', function() {
+    let id = $(this).attr('id').slice(6, 7)
+    let name = $(this).attr('id').slice(7);
+    if (sessionDeck[name].quantity > 1) {
+    sessionDeck[name].quantity -= 1;
+    let $id = $('#' + sessionDeck[name].id);
+    $id.text(name + ' x' + sessionDeck[name].quantity)
+    }
+  })
+
+  $(document).on('click', '.plus', function() {
+    let id = $(this).attr('id').slice(5, 6)
+    let name = $(this).attr('id').slice(6);
+    if (sessionDeck[name].quantity < 4) {
+    sessionDeck[name].quantity += 1;
+    let $id = $('#' + sessionDeck[name].id);
+    $id.text(name + ' x' + sessionDeck[name].quantity)
     }
   })
 });

@@ -93,6 +93,13 @@ $( document ).ready(function() {
     let $minus = $('<button class="minus">-</button>');
     let name = $(this).attr('id')
     if(sessionDeck.hasOwnProperty(name)){
+      if (name.split(' ').includes('Forest') || name.split(' ').includes('Mountain') || name.split(' ').includes('Island') || name.split(' ').includes('Swamp') || name.split(' ').includes('Plains')) {
+        sessionDeck[name].quantity += 1;
+        let $id = $('#' + sessionDeck[name].id);
+        $id.text(name + ' x' + sessionDeck[name].quantity)
+        sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
+        return
+      }
       if(sessionDeck[name].quantity < 4){
         sessionDeck[name].quantity += 1;
         let $id = $('#' + sessionDeck[name].id) 
@@ -135,6 +142,13 @@ $( document ).ready(function() {
   $(document).on('click', '.plus', function() {
     let id = $(this).attr('id').slice(5, 6)
     let name = $(this).attr('id').slice(6);
+    if (name.split(' ').includes('Forest') || name.split(' ').includes('Mountain') || name.split(' ').includes('Island') || name.split(' ').includes('Swamp') || name.split(' ').includes('Plains')) {
+      sessionDeck[name].quantity += 1;
+      let $id = $('#' + sessionDeck[name].id);
+      $id.text(name + ' x' + sessionDeck[name].quantity)
+      sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
+      return
+    }
     if (sessionDeck[name].quantity < 4) {
     sessionDeck[name].quantity += 1;
     let $id = $('#' + sessionDeck[name].id);

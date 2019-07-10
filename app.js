@@ -82,6 +82,7 @@ $( document ).ready(function() {
   })
 
   $(document).on('click', '.card', function() {
+    console.log('clicked')
     if(sessionDeck === undefined){
       sessionDeck = {};
     } else {
@@ -119,6 +120,15 @@ $( document ).ready(function() {
     sessionDeck[name].quantity -= 1;
     let $id = $('#' + sessionDeck[name].id);
     $id.text(name + ' x' + sessionDeck[name].quantity)
+    sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
+    }
+    if (sessionDeck[name].quantity === 1) {
+      let $plusId = document.getElementById('plus-' + $(this).attr('id').slice(6,7) + name);
+      $('#' + id).remove();
+      $plusId.remove();
+      $(this).remove(); 
+      delete sessionDeck[name]
+      sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
     }
   })
 
@@ -129,6 +139,7 @@ $( document ).ready(function() {
     sessionDeck[name].quantity += 1;
     let $id = $('#' + sessionDeck[name].id);
     $id.text(name + ' x' + sessionDeck[name].quantity)
+    sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
     }
   })
 });

@@ -23,12 +23,10 @@ if (localStorage.getItem('mh2') === null){
     })
     .then(function(data) {
       localStorage.setItem('mh2', JSON.stringify(data))
-      state.modernHorizons.concat(cards.data)
+      state.modernHorizons.concat(data.cards)
     })
   } else {
-    console.log('here')
     state.modernHorizons = state.modernHorizons.concat(JSON.parse(localStorage.getItem('mh2')).cards)
-    console.log(state)
   }
 
 if(localStorage.getItem('mh3') === null){
@@ -38,23 +36,24 @@ if(localStorage.getItem('mh3') === null){
     })
     .then(function(data) {
       localStorage.setItem('mh3', JSON.stringify(data))
-      state.modernHorizons.concat(cards.data)
+      state.modernHorizons.concat(data.cards)
     })
   } else {
     state.modernHorizons = state.modernHorizons.concat(JSON.parse(localStorage.getItem('mh3')).cards)
   }
 
-// let modernHorizons = JSON.parse(localStorage.getItem('mh1'))
-// let mh2 = JSON.parse(localStorage.getItem('mh2'))
-// let mh3 = JSON.parse(localStorage.getItem('mh3'))
-// modernHorizons = modernHorizons.cards.concat(mh2.cards).concat(mh3.cards)
-// let sessionDeck;
-// let deckCounter;
-// let activeDeck;
+
+let sessionDeck = null;
+let activeDeck;
 
 $( document ).ready(function() {
   sessionStorage.clear()
-  if ($('.page-count').text() === 'Page:'){
+  if (localStorage.getItem('state') === null) {
+    localStorage.setItem('state', JSON.stringify(state));
+  } else {
+  state.decks = JSON.parse(localStorage.getItem('state')).decks
+  }
+  if ($('.page-count').text() === 'Page:' && state.modernHorizons){
     $('.page-count').text('Page: 1 of 10');
     var pageNumber = 1;
     for (let i = 0; i < 27; i += 1) {
@@ -126,7 +125,7 @@ $( document ).ready(function() {
   })
 
   $(document).on('click', '.card', function() {
-    if(sessionDeck === undefined){
+    if(sessionDeck === null){
       sessionDeck = {};
     } else {
       sessionDeck = JSON.parse(sessionStorage.getItem('sessionDeck'));
@@ -142,7 +141,8 @@ $( document ).ready(function() {
         $id.text(name + ' x' + sessionDeck[name].quantity)
         sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
         if (activeDeck !== undefined) {
-          localStorage.setItem('Deck-' + activeDeck, JSON.stringify(sessionDeck));
+          state.decks['deck' + activeDeck] = sessionDeck
+          localStorage.setItem('state', JSON.stringify(state));
         }
         return
       }
@@ -152,7 +152,8 @@ $( document ).ready(function() {
         $id.text(name + ' x' + sessionDeck[name].quantity)
         sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
         if (activeDeck !== undefined) {
-          localStorage.setItem('Deck-' + activeDeck, JSON.stringify(sessionDeck));
+          state.decks['deck' + activeDeck] = sessionDeck
+          localStorage.setItem('state', JSON.stringify(state));
         }
       }
     } else {
@@ -167,7 +168,8 @@ $( document ).ready(function() {
     $('.subtract').append($minus);
     $('.add').append($plus);
     if (activeDeck !== undefined) {
-      localStorage.setItem('Deck-' + activeDeck, JSON.stringify(sessionDeck));
+      state.decks['deck' + activeDeck] = sessionDeck
+      localStorage.setItem('state', JSON.stringify(state));
     }
     }
   })
@@ -181,7 +183,8 @@ $( document ).ready(function() {
     $id.text(name + ' x' + sessionDeck[name].quantity)
     sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
     if (activeDeck !== undefined) {
-      localStorage.setItem('Deck-' + activeDeck, JSON.stringify(sessionDeck));
+      state.decks['deck' + activeDeck] = sessionDeck
+      localStorage.setItem('state', JSON.stringify(state));
     }
     }
     if (sessionDeck[name].quantity === 1) {
@@ -194,7 +197,8 @@ $( document ).ready(function() {
       delete sessionDeck[name]
       sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
       if (activeDeck !== undefined) {
-        localStorage.setItem('Deck-' + activeDeck, JSON.stringify(sessionDeck));
+        state.decks['deck' + activeDeck] = sessionDeck
+        localStorage.setItem('state', JSON.stringify(state));
       }
     }
   })
@@ -208,7 +212,8 @@ $( document ).ready(function() {
       $id.text(name + ' x' + sessionDeck[name].quantity)
       sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
       if (activeDeck !== undefined) {
-        localStorage.setItem('Deck-' + activeDeck, JSON.stringify(sessionDeck));
+        state.decks['deck' + activeDeck] = sessionDeck
+        localStorage.setItem('state', JSON.stringify(state));
       }
       return
     }
@@ -218,48 +223,119 @@ $( document ).ready(function() {
     $id.text(name + ' x' + sessionDeck[name].quantity)
     sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
     if (activeDeck !== undefined) {
-      localStorage.setItem('Deck-' + activeDeck, JSON.stringify(sessionDeck));
+      state.decks['deck' + activeDeck] = sessionDeck
+      localStorage.setItem('state', JSON.stringify(state));
     }
     }
   })
 
-  $(document).on('click', '#save-deck', function() {
+  $(document).on('click', '#save-deck1', function() {
     if (sessionDeck === undefined){
       return;
     }
-    let $newDeck = $('<div></div>');
-    if (deckCounter === undefined || deckCounter === 0){
-      $newDeck.addClass('Deck');
-      $newDeck.text('Deck-1');
-      deckCounter = 1;
-      $newDeck.attr('id', 'D' + deckCounter)
-      activeDeck = deckCounter;
-      $newDeck.css('background-color', '#42d4f5')
-    } else if (activeDeck !== undefined) {
-      localStorage.setItem('Deck-' + activeDeck, JSON.stringify(sessionDeck));
-      return
-    } else {
-      $newDeck.addClass('Deck');
-      $newDeck.attr('id', deckCounter)
-      $newDeck.text('Deck-' + deckCounter);
-      $newDeck.css('background-color', '#42d4f5')
-      deckCounter += 1;
-      activeDeck = deckCounter;
-    }
-    
-    $('.my-decks').append($newDeck);
-    localStorage.setItem('Deck-' + deckCounter, JSON.stringify(sessionDeck))
+    activeDeck = 1;
+    state.decks.deck1 = sessionDeck;
+    localStorage.setItem('state', JSON.stringify(state));
+    $('.deck').css('background-color', '#ffffff')
+    $('.tool-button').css('background-color', '#000000')
+    $('#d1').css('background-color', '#42d4f5')
+    $('#save-deck1').css('background-color', '#42d4f5')
+    $('#delete-deck1').css('background-color', '#42d4f5')
+    $('#random1').css('background-color', '#42d4f5')
+    // if (activeDeck === undefined) {
+    //   if (state.decks.deck1 === null) {
+    //     activeDeck = 1;
+    //     state.decks['deck' + activeDeck] = sessionDeck
+    //     localStorage.setItem('state', JSON.stringify(state));
+    //     $('#d1').css('background-color', '#42d4f5')
+    //     return
+    //   } else if (state.decks.deck2 === null) {
+    //     activeDeck = 2;
+    //     state.decks['deck' + activeDeck] = sessionDeck
+    //     localStorage.setItem('state', JSON.stringify(state));
+    //     $('#d2').css('background-color', '#42d4f5')
+    //     return
+    //   } else if (state.decks.deck3 === null) {
+    //     activeDeck = 3;
+    //     state.decks['deck' + activeDeck] = sessionDeck
+    //     localStorage.setItem('state', JSON.stringify(state));
+    //     $('#d3').css('background-color', '#42d4f5')
+    //     return
+    //   } else if (state.decks.deck4 === null) {
+    //     activeDeck = 4;
+    //     state.decks['deck' + activeDeck] = sessionDeck
+    //     localStorage.setItem('state', JSON.stringify(state));
+    //     $('#d4').css('background-color', '#42d4f5')
+    //     return
+    //   } else {
+    //     alert('You may only save up to four decks')
+    //     return
+    //   }
+    // } else if (activeDeck !== undefined) {
+    //   state.decks['deck' + activeDeck] = sessionDeck
+    //   localStorage.setItem('state', JSON.stringify(state));
+    //   return
+    // } 
   })
 
-  $(document).on('click', '.Deck', function() {
+  $(document).on('click', '#save-deck2', function() {
+    if (sessionDeck === undefined){
+      return;
+    }
+    activeDeck = 2;
+    state.decks.deck2 = sessionDeck;
+    localStorage.setItem('state', JSON.stringify(state));
+    $('.deck').css('background-color', '#ffffff')
+    $('.tool-button').css('background-color', '#000000')
+    $('#d2').css('background-color', '#42d4f5')
+    $('#save-deck2').css('background-color', '#42d4f5')
+    $('#delete-deck2').css('background-color', '#42d4f5')
+    $('#random2').css('background-color', '#42d4f5') 
+  })
+
+  $(document).on('click', '#save-deck3', function() {
+    if (sessionDeck === undefined){
+      return;
+    }
+    activeDeck = 3;
+    state.decks.deck3 = sessionDeck;
+    localStorage.setItem('state', JSON.stringify(state));
+    $('.deck').css('background-color', '#ffffff')
+    $('.tool-button').css('background-color', '#000000')
+    $('#d3').css('background-color', '#42d4f5')
+    $('#save-deck3').css('background-color', '#42d4f5')
+    $('#delete-deck3').css('background-color', '#42d4f5')
+    $('#random3').css('background-color', '#42d4f5') 
+  })
+
+  $(document).on('click', '#save-deck4', function() {
+    if (sessionDeck === undefined){
+      return;
+    }
+    activeDeck = 4;
+    state.decks.deck4 = sessionDeck;
+    localStorage.setItem('state', JSON.stringify(state));
+    $('.deck').css('background-color', '#ffffff')
+    $('.tool-button').css('background-color', '#000000')
+    $('#d4').css('background-color', '#42d4f5')
+    $('#save-deck4').css('background-color', '#42d4f5')
+    $('#delete-deck4').css('background-color', '#42d4f5')
+    $('#random4').css('background-color', '#42d4f5') 
+  })
+
+  $(document).on('click', '.deck', function() {
     $('.previous').text('');
     $('.next').text('');
     $('.page-count').text($(this).text())
     let deckNumber = $(this).attr('id').slice(1);
-    $('.Deck').css('background-color', '#ffffff')
+    $('.deck').css('background-color', '#ffffff')
+    $('.tool-button').css('background-color', '#000000')
     $(this).css('background-color', '#42d4f5')
+    $('#save-deck' + deckNumber).css('background-color', '#42d4f5')
+    $('#delete-deck' + deckNumber).css('background-color', '#42d4f5')
+    $('#random' + deckNumber).css('background-color', '#42d4f5')
     activeDeck = deckNumber;
-    sessionDeck = JSON.parse(localStorage.getItem('Deck-' + deckNumber));
+    sessionDeck = JSON.parse(localStorage.getItem('state')).decks['deck' + activeDeck];
     sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
     $('.card-display').html('');
     $('.add').html('');
@@ -281,7 +357,7 @@ $( document ).ready(function() {
       $('.add').append($plus);
       $('.subtract').append($minus)
     }
-    sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
+    //sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
   })
 
   $(document).on('click', '.set-name', function() {
@@ -292,9 +368,9 @@ $( document ).ready(function() {
     $('.card-display').html('');
     for (let i = 0; i < 25; i += 1) {
       let $card = $('<div class="card"></div>')
-      let image = modernHorizons[i].imageUrl
+      let image = state.modernHorizons[i].imageUrl
       $card.css('background-image', 'url(' + image + ')')
-      $card.attr('id', modernHorizons[i].name)
+      $card.attr('id', state.modernHorizons[i].name)
       $('.card-display').append($card)
     }
   })
@@ -305,27 +381,15 @@ $( document ).ready(function() {
     }
     let affirm = confirm('Are you sure you want to delete Deck-' + activeDeck)
     if(affirm === true){
-      localStorage.removeItem('Deck-' + activeDeck);
+      state.decks['deck' + activeDeck] = null;
+      localStorage.setItem('state', JSON.stringify(state))
       sessionStorage.clear();
-      sessionDeck = undefined;
-      $('#D' + activeDeck).remove()
+      sessionDeck = null;
       activeDeck = undefined;
-      deckCounter -= 1;
       $('.card-display').html('');
       $('.add').html('');
       $('.subtract').html('');
       $('.name-and-quantity').html('');
-      $('.page-count').text('Page: 1 of 10');
-      $('.previous').text('Previous');
-      $('.next').text('Next');
-      pageNumber = 1;
-      for (let i = 0; i < 25; i += 1) {
-        let $card = $('<div class="card"></div>')
-        let image = modernHorizons[i].imageUrl
-        $card.css('background-image', 'url(' + image + ')')
-        $card.attr('id', modernHorizons[i].name)
-        $('.card-display').append($card)
-      }
     }
   })
 

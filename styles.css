@@ -55,10 +55,10 @@ body {
 }
 
 .tool-button {
-    margin: 10px;
+    margin: 2px;
     background-color: black;
     color: white;
-    font-size: 16px;
+    font-size: 12px;
 }
 
 .set-title {
@@ -96,6 +96,7 @@ body {
 .nav-bar {
     display: flex;
     justify-content: center;
+    margin-top: 10px;
 }
 
 .previous {

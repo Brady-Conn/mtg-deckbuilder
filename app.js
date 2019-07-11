@@ -237,45 +237,11 @@ $( document ).ready(function() {
     state.decks.deck1 = sessionDeck;
     localStorage.setItem('state', JSON.stringify(state));
     $('.deck').css('background-color', '#ffffff')
-    $('.tool-button').css('background-color', '#000000')
+    $('.tool-button').css('background-color', '#ffffff')
     $('#d1').css('background-color', '#42d4f5')
     $('#save-deck1').css('background-color', '#42d4f5')
     $('#delete-deck1').css('background-color', '#42d4f5')
     $('#random1').css('background-color', '#42d4f5')
-    // if (activeDeck === undefined) {
-    //   if (state.decks.deck1 === null) {
-    //     activeDeck = 1;
-    //     state.decks['deck' + activeDeck] = sessionDeck
-    //     localStorage.setItem('state', JSON.stringify(state));
-    //     $('#d1').css('background-color', '#42d4f5')
-    //     return
-    //   } else if (state.decks.deck2 === null) {
-    //     activeDeck = 2;
-    //     state.decks['deck' + activeDeck] = sessionDeck
-    //     localStorage.setItem('state', JSON.stringify(state));
-    //     $('#d2').css('background-color', '#42d4f5')
-    //     return
-    //   } else if (state.decks.deck3 === null) {
-    //     activeDeck = 3;
-    //     state.decks['deck' + activeDeck] = sessionDeck
-    //     localStorage.setItem('state', JSON.stringify(state));
-    //     $('#d3').css('background-color', '#42d4f5')
-    //     return
-    //   } else if (state.decks.deck4 === null) {
-    //     activeDeck = 4;
-    //     state.decks['deck' + activeDeck] = sessionDeck
-    //     localStorage.setItem('state', JSON.stringify(state));
-    //     $('#d4').css('background-color', '#42d4f5')
-    //     return
-    //   } else {
-    //     alert('You may only save up to four decks')
-    //     return
-    //   }
-    // } else if (activeDeck !== undefined) {
-    //   state.decks['deck' + activeDeck] = sessionDeck
-    //   localStorage.setItem('state', JSON.stringify(state));
-    //   return
-    // } 
   })
 
   $(document).on('click', '#save-deck2', function() {
@@ -286,7 +252,7 @@ $( document ).ready(function() {
     state.decks.deck2 = sessionDeck;
     localStorage.setItem('state', JSON.stringify(state));
     $('.deck').css('background-color', '#ffffff')
-    $('.tool-button').css('background-color', '#000000')
+    $('.tool-button').css('background-color', '#ffffff')
     $('#d2').css('background-color', '#42d4f5')
     $('#save-deck2').css('background-color', '#42d4f5')
     $('#delete-deck2').css('background-color', '#42d4f5')
@@ -301,7 +267,7 @@ $( document ).ready(function() {
     state.decks.deck3 = sessionDeck;
     localStorage.setItem('state', JSON.stringify(state));
     $('.deck').css('background-color', '#ffffff')
-    $('.tool-button').css('background-color', '#000000')
+    $('.tool-button').css('background-color', '#ffffff')
     $('#d3').css('background-color', '#42d4f5')
     $('#save-deck3').css('background-color', '#42d4f5')
     $('#delete-deck3').css('background-color', '#42d4f5')
@@ -316,7 +282,7 @@ $( document ).ready(function() {
     state.decks.deck4 = sessionDeck;
     localStorage.setItem('state', JSON.stringify(state));
     $('.deck').css('background-color', '#ffffff')
-    $('.tool-button').css('background-color', '#000000')
+    $('.tool-button').css('background-color', '#ffffff')
     $('#d4').css('background-color', '#42d4f5')
     $('#save-deck4').css('background-color', '#42d4f5')
     $('#delete-deck4').css('background-color', '#42d4f5')
@@ -329,7 +295,7 @@ $( document ).ready(function() {
     $('.page-count').text($(this).text())
     let deckNumber = $(this).attr('id').slice(1);
     $('.deck').css('background-color', '#ffffff')
-    $('.tool-button').css('background-color', '#000000')
+    $('.tool-button').css('background-color', '#ffffff')
     $(this).css('background-color', '#42d4f5')
     $('#save-deck' + deckNumber).css('background-color', '#42d4f5')
     $('#delete-deck' + deckNumber).css('background-color', '#42d4f5')
@@ -375,68 +341,72 @@ $( document ).ready(function() {
     }
   })
 
-  $(document).on('click', '#delete-deck', function() {
-    if (activeDeck === undefined){
-      return
-    }
-    let affirm = confirm('Are you sure you want to delete Deck-' + activeDeck)
+  $(document).on('click', '#delete-deck1', function() {
+    let affirm = confirm('Are you sure you want to delete Deck-1')
     if(affirm === true){
-      state.decks['deck' + activeDeck] = null;
+      state.decks.deck1 = null;
       localStorage.setItem('state', JSON.stringify(state))
-      sessionStorage.clear();
-      sessionDeck = null;
-      activeDeck = undefined;
-      $('.card-display').html('');
-      $('.add').html('');
-      $('.subtract').html('');
-      $('.name-and-quantity').html('');
+      if ($('.page-count').text() === 'Deck - 1') {
+        sessionStorage.clear();
+        sessionDeck = null;
+        activeDeck = undefined;
+        $('.card-display').html('');
+        $('.add').html('');
+        $('.subtract').html('');
+        $('.name-and-quantity').html('');
+      }
     }
   })
 
-  $(document).on('click', '#new-deck', function() {
-    if($('.Deck').length > 3){
-      alert('You many only save up to four decks')
-      return
+  $(document).on('click', '#delete-deck2', function() {
+    let affirm = confirm('Are you sure you want to delete Deck-2')
+    if(affirm === true){
+      state.decks.deck2 = null;
+      localStorage.setItem('state', JSON.stringify(state))
+      if ($('.page-count').text() === 'Deck - 2') {
+        sessionStorage.clear();
+        sessionDeck = null;
+        activeDeck = undefined;
+        $('.card-display').html('');
+        $('.add').html('');
+        $('.subtract').html('');
+        $('.name-and-quantity').html('');
+      }
     }
-    let $newDeck = $('<div></div>');
-    sessionStorage.clear();
-    sessionDeck = undefined;
-    activeDeck = $('.Deck').length + 1
-    $('.card-display').html('');
-    $('.add').html('');
-    $('.subtract').html('');
-    $('.name-and-quantity').html('');
-    $('.page-count').text('Deck-' + activeDeck);
-    $('.previous').text('');
-    $('.next').text('');
-    pageNumber = 1;
-    for (let i = 0; i < 25; i += 1) {
-      let $card = $('<div class="card"></div>')
-      let image = modernHorizons[i].imageUrl
-      $card.css('background-image', 'url(' + image + ')')
-      $card.attr('id', modernHorizons[i].name)
-      $('.card-display').append($card)
-    }
-    if (deckCounter === undefined || deckCounter === 0){
-      $newDeck.addClass('Deck');
-      $newDeck.text('Deck-1');
-      deckCounter = 1;
-      $newDeck.attr('id', 'D' + deckCounter)
-      activeDeck = deckCounter;
-      $newDeck.css('background-color', '#42d4f5')
-    } else if (activeDeck !== undefined) {
-      localStorage.setItem('Deck-' + activeDeck, JSON.stringify(sessionDeck));
-      return
-    } else {
-      $newDeck.addClass('Deck');
-      $newDeck.attr('id', deckCounter)
-      $newDeck.text('Deck-' + deckCounter);
-      $newDeck.css('background-color', '#42d4f5')
-      deckCounter += 1;
-      activeDeck = deckCounter;
-    }
-    
-    $('.my-decks').append($newDeck);
-    localStorage.setItem('Deck-' + deckCounter, JSON.stringify(sessionDeck))
   })
+
+  $(document).on('click', '#delete-deck3', function() {
+    let affirm = confirm('Are you sure you want to delete Deck-3')
+    if(affirm === true){
+      state.decks.deck3 = null;
+      localStorage.setItem('state', JSON.stringify(state))
+      if ($('.page-count').text() === 'Deck - 3') {
+        sessionStorage.clear();
+        sessionDeck = null;
+        activeDeck = undefined;
+        $('.card-display').html('');
+        $('.add').html('');
+        $('.subtract').html('');
+        $('.name-and-quantity').html('');
+      }
+    }
+  })
+
+  $(document).on('click', '#delete-deck4', function() {
+    let affirm = confirm('Are you sure you want to delete Deck-4')
+    if(affirm === true){
+      state.decks.deck4 = null;
+      localStorage.setItem('state', JSON.stringify(state))
+      if ($('.page-count').text() === 'Deck - 4') {
+        sessionStorage.clear();
+        sessionDeck = null;
+        activeDeck = undefined;
+        $('.card-display').html('');
+        $('.add').html('');
+        $('.subtract').html('');
+        $('.name-and-quantity').html('');
+      }
+    }
+  })
+
 })

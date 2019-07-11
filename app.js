@@ -1,3 +1,8 @@
+const state = {
+  modernHorizons: null, 
+  decks: {deck1: null, deck2: null, deck3: null, deck4: null}
+}
+
 if (localStorage.getItem('mh1') === null){
   fetch('https://api.magicthegathering.io/v1/cards?page=1&set=MH1')
     .then(function(response) {
@@ -5,7 +10,10 @@ if (localStorage.getItem('mh1') === null){
     })
     .then(function(data) {
       localStorage.setItem('mh1', JSON.stringify(data))
+      state.modernHorizons = data.cards
     });
+  } else {
+    state.modernHorizons = JSON.parse(localStorage.getItem('mh1')).cards
   }
 
 if (localStorage.getItem('mh2') === null){
@@ -15,7 +23,12 @@ if (localStorage.getItem('mh2') === null){
     })
     .then(function(data) {
       localStorage.setItem('mh2', JSON.stringify(data))
+      state.modernHorizons.concat(cards.data)
     })
+  } else {
+    console.log('here')
+    state.modernHorizons = state.modernHorizons.concat(JSON.parse(localStorage.getItem('mh2')).cards)
+    console.log(state)
   }
 
 if(localStorage.getItem('mh3') === null){
@@ -25,97 +38,57 @@ if(localStorage.getItem('mh3') === null){
     })
     .then(function(data) {
       localStorage.setItem('mh3', JSON.stringify(data))
+      state.modernHorizons.concat(cards.data)
     })
-}
+  } else {
+    state.modernHorizons = state.modernHorizons.concat(JSON.parse(localStorage.getItem('mh3')).cards)
+  }
 
-let modernHorizons = JSON.parse(localStorage.getItem('mh1'))
-let mh2 = JSON.parse(localStorage.getItem('mh2'))
-let mh3 = JSON.parse(localStorage.getItem('mh3'))
-modernHorizons = modernHorizons.cards.concat(mh2.cards).concat(mh3.cards)
-let sessionDeck;
-let deckCounter;
-let activeDeck;
-if(localStorage.getItem('Deck-1') === null){
-  var deck1 = false;
-} else {
-  var deck1 = true;
-}
-if(localStorage.getItem('Deck-2') === null){
-  var deck2 = false;
-} else {
-  var deck2 = true;
-}
-if(localStorage.getItem('Deck-3') === null){
-  var deck3 = false;
-} else {
-  var deck3 = true;
-}
-if(localStorage.getItem('Deck-4') === null){
-  var deck4 = false;
-} else {
-  var deck4 = true;
-}
-
+// let modernHorizons = JSON.parse(localStorage.getItem('mh1'))
+// let mh2 = JSON.parse(localStorage.getItem('mh2'))
+// let mh3 = JSON.parse(localStorage.getItem('mh3'))
+// modernHorizons = modernHorizons.cards.concat(mh2.cards).concat(mh3.cards)
+// let sessionDeck;
+// let deckCounter;
+// let activeDeck;
 
 $( document ).ready(function() {
   sessionStorage.clear()
   if ($('.page-count').text() === 'Page:'){
     $('.page-count').text('Page: 1 of 10');
     var pageNumber = 1;
-    for (let i = 0; i < 25; i += 1) {
+    for (let i = 0; i < 27; i += 1) {
       let $card = $('<div class="card"></div>')
-      let image = modernHorizons[i].imageUrl
+      let image = state.modernHorizons[i].imageUrl
       $card.css('background-image', 'url(' + image + ')')
-      $card.attr('id', modernHorizons[i].name)
+      $card.attr('id', state.modernHorizons[i].name)
       $('.card-display').append($card)
     }
   }
-
-  if (localStorage.getItem('Deck-1') !== null) {
-    let $newDeck = $('<div></div>');
-    $newDeck.addClass('Deck');
-    $newDeck.attr('id', 'D1')
-    $newDeck.text('Deck-1');
-    $('.my-decks').append($newDeck);
-  }
-
-  if (localStorage.getItem('Deck-2') !== null) {
-    let $newDeck = $('<div></div>');
-    $newDeck.addClass('Deck');
-    $newDeck.attr('id', 'D2')
-    $newDeck.text('Deck-2');
-    $('.my-decks').append($newDeck);
-  }
-
-  if (localStorage.getItem('Deck-3') !== null) {
-    let $newDeck = $('<div></div>');
-    $newDeck.addClass('Deck');
-    $newDeck.attr('id', 'D3')
-    $newDeck.text('Deck-3');
-    $('.my-decks').append($newDeck);
-  }
-
-  if (localStorage.getItem('Deck-4') !== null) {
-    let $newDeck = $('<div></div>');
-    $newDeck.addClass('Deck');
-    $newDeck.attr('id', 'D4')
-    $newDeck.text('Deck-4');
-    $('.my-decks').append($newDeck);
-  }
-
-  deckCounter = $('.Deck').length
 
   $('.next').click(function() {
     if (pageNumber === 10){
       return;
     }
-    let i = pageNumber * 25;
+    let i = pageNumber * 27;
     $('.card-display').html('');
-    for( i; i < pageNumber * 25 + 25; i += 1) {
+    if (pageNumber === 9){
+      for(i; i < state.modernHorizons.length; i += 1){
+        let $card = $('<div class="card"></div>')
+      let image = state.modernHorizons[i].imageUrl
+      $card.css('background-image', 'url(' + image + ')');
+      $card.attr('id', state.modernHorizons[i].name);
+      $('.card-display').append($card);
+      }
+      pageNumber += 1;
+      $('.page-count').text('Page: ' + pageNumber + ' of 10');
+      return;
+    }
+    for( i; i < pageNumber * 27 + 27; i += 1) {
       let $card = $('<div class="card"></div>')
-      let image = modernHorizons[i].imageUrl
+      let image = state.modernHorizons[i].imageUrl
       $card.css('background-image', 'url(' + image + ')')
-      $card.attr('id', modernHorizons[i].name)
+      $card.attr('id', state.modernHorizons[i].name)
       $('.card-display').append($card)
     }
     pageNumber += 1;
@@ -126,13 +99,26 @@ $( document ).ready(function() {
     if (pageNumber === 1){
       return;
     }
-    let i = pageNumber * 25 - 50;
     $('.card-display').html('');
-    for ( i; i < pageNumber * 25; i += 1) {
+    if (pageNumber === 10){
+      let i = 243 - 27
+      for ( i; i < 243; i += 1) {
+        let $card = $('<div class="card"></div>')
+        let image = state.modernHorizons[i].imageUrl
+        $card.css('background-image', 'url(' + image + ')')
+        $card.attr('id', state.modernHorizons[i].name)
+        $('.card-display').append($card)
+      }
+      pageNumber -= 1;
+      $('.page-count').text('Page: ' + pageNumber + ' of 10')
+      return;
+    } 
+    let i = pageNumber * 27 - 54;
+    for ( i; i < pageNumber * 27; i += 1) {
       let $card = $('<div class="card"></div>')
-      let image = modernHorizons[i].imageUrl
+      let image = state.modernHorizons[i].imageUrl
       $card.css('background-image', 'url(' + image + ')')
-      $card.attr('id', modernHorizons[i].name)
+      $card.attr('id', state.modernHorizons[i].name)
       $('.card-display').append($card)
     }
     pageNumber -= 1;

@@ -2,8 +2,9 @@ const state = {
   modernHorizons: null, 
   decks: {deck1: null, deck2: null, deck3: null, deck4: null}
 }
+var pageNumber;
+const getCards = () => {
 
-if (localStorage.getItem('mh1') === null){
   fetch('https://api.magicthegathering.io/v1/cards?page=1&set=MH1')
     .then(function(response) {
       return response.json();
@@ -11,37 +12,47 @@ if (localStorage.getItem('mh1') === null){
     .then(function(data) {
       localStorage.setItem('mh1', JSON.stringify(data))
       state.modernHorizons = data.cards
-    });
-  } else {
-    state.modernHorizons = JSON.parse(localStorage.getItem('mh1')).cards
-  }
+    }).then(function() {
+      fetch('https://api.magicthegathering.io/v1/cards?page=2&set=MH1')
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(data) {
+          localStorage.setItem('mh2', JSON.stringify(data))
+          state.modernHorizons.concat(data.cards)
+        })
+    }).then(function() {
+      fetch('https://api.magicthegathering.io/v1/cards?page=3&set=MH1')
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(data) {
+          localStorage.setItem('mh3', JSON.stringify(data))
+          state.modernHorizons.concat(data.cards)
+        })
+        .then(function() {
+        $('.page-count').text('Page: 1 of 10');
+        $('.card-display').text('');
+        pageNumber = 1;
+        for (let i = 0; i < 27; i += 1) {
+          let $card = $('<div class="card"></div>')
+          let image = state.modernHorizons[i].imageUrl
+          $card.css('background-image', 'url(' + image + ')')
+          $card.attr('id', state.modernHorizons[i].name)
+          $('.card-display').append($card)
+        }
+      })
+    })
+}
 
-if (localStorage.getItem('mh2') === null){
-  fetch('https://api.magicthegathering.io/v1/cards?page=2&set=MH1')
-    .then(function(response) {
-      return response.json();
-    })
-    .then(function(data) {
-      localStorage.setItem('mh2', JSON.stringify(data))
-      state.modernHorizons.concat(data.cards)
-    })
-  } else {
-    state.modernHorizons = state.modernHorizons.concat(JSON.parse(localStorage.getItem('mh2')).cards)
-  }
-
-if(localStorage.getItem('mh3') === null){
-  fetch('https://api.magicthegathering.io/v1/cards?page=3&set=MH1')
-    .then(function(response) {
-      return response.json();
-    })
-    .then(function(data) {
-      localStorage.setItem('mh3', JSON.stringify(data))
-      state.modernHorizons.concat(data.cards)
-    })
-  } else {
-    state.modernHorizons = state.modernHorizons.concat(JSON.parse(localStorage.getItem('mh3')).cards)
-  }
-
+if (localStorage.getItem('mh1') === null || localStorage.getItem('mh2') === null || localStorage.getItem('mh3') === null) {
+  $('.card-display').text('Getting cards, please wait');
+  getCards()
+} else {
+  state.modernHorizons = JSON.parse(localStorage.getItem('mh1')).cards
+  state.modernHorizons = state.modernHorizons.concat(JSON.parse(localStorage.getItem('mh2')).cards)
+  state.modernHorizons = state.modernHorizons.concat(JSON.parse(localStorage.getItem('mh3')).cards)
+}
 
 let sessionDeck = null;
 let activeDeck;

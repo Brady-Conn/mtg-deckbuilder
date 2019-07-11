@@ -35,6 +35,27 @@ modernHorizons = modernHorizons.cards.concat(mh2.cards).concat(mh3.cards)
 let sessionDeck;
 let deckCounter;
 let activeDeck;
+if(localStorage.getItem('Deck-1') === null){
+  var deck1 = false;
+} else {
+  var deck1 = true;
+}
+if(localStorage.getItem('Deck-2') === null){
+  var deck2 = false;
+} else {
+  var deck2 = true;
+}
+if(localStorage.getItem('Deck-3') === null){
+  var deck3 = false;
+} else {
+  var deck3 = true;
+}
+if(localStorage.getItem('Deck-4') === null){
+  var deck4 = false;
+} else {
+  var deck4 = true;
+}
+
 
 $( document ).ready(function() {
   sessionStorage.clear()
@@ -335,9 +356,9 @@ $( document ).ready(function() {
     $('.add').html('');
     $('.subtract').html('');
     $('.name-and-quantity').html('');
-    $('.page-count').text('Page: 1 of 10');
-    $('.previous').text('Previous');
-    $('.next').text('Next');
+    $('.page-count').text('Deck-' + activeDeck);
+    $('.previous').text('');
+    $('.next').text('');
     pageNumber = 1;
     for (let i = 0; i < 25; i += 1) {
       let $card = $('<div class="card"></div>')

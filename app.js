@@ -3,6 +3,20 @@ const state = {
   decks: {deck1: null, deck2: null, deck3: null, deck4: null}
 }
 var pageNumber;
+
+const displayCards = function(pageNumber) {
+  $('.page-count').text('Page: 1 of 10');
+  $('.card-display').text('');
+  let cardsToBeShown = state.modernHorizons['page' + pageNumber];
+  for (let i = 0;  i < cardsToBeShown.length; i += 1) {
+    let $card = $('<div class="card"></div>')
+    let image = cardsToBeShown[i].imageUrl;
+    $card.css('background-image', 'url(' + image + ')')
+    $card.attr('id', cardsToBeShown[i].name)
+    $('.card-display').append($card)
+  }
+}
+
 const getCards = () => {
 
   fetch('https://api.magicthegathering.io/v1/cards?page=1&set=MH1')
@@ -10,16 +24,16 @@ const getCards = () => {
       return response.json();
     })
     .then(function(data) {
-      localStorage.setItem('mh1', JSON.stringify(data))
-      state.modernHorizons = data.cards
+      localStorage.setItem('mh', JSON.stringify(data))
     }).then(function() {
       fetch('https://api.magicthegathering.io/v1/cards?page=2&set=MH1')
         .then(function(response) {
           return response.json();
         })
         .then(function(data) {
-          localStorage.setItem('mh2', JSON.stringify(data))
-          state.modernHorizons.concat(data.cards)
+          let newData = JSON.parse(localStorage.getItem('mh'))
+          newData.cards = newData.cards.concat(data.cards)
+          localStorage.setItem('mh', JSON.stringify(newData))
         })
     }).then(function() {
       fetch('https://api.magicthegathering.io/v1/cards?page=3&set=MH1')
@@ -27,111 +41,68 @@ const getCards = () => {
           return response.json();
         })
         .then(function(data) {
-          localStorage.setItem('mh3', JSON.stringify(data))
-          state.modernHorizons.concat(data.cards)
+          let newData = JSON.parse(localStorage.getItem('mh'))
+          newData.cards = newData.cards.concat(data.cards)
+          localStorage.setItem('mh', JSON.stringify(newData))
         })
         .then(function() {
-        $('.page-count').text('Page: 1 of 10');
-        $('.card-display').text('');
-        pageNumber = 1;
-        for (let i = 0; i < 27; i += 1) {
-          let $card = $('<div class="card"></div>')
-          let image = state.modernHorizons[i].imageUrl
-          $card.css('background-image', 'url(' + image + ')')
-          $card.attr('id', state.modernHorizons[i].name)
-          $('.card-display').append($card)
-        }
+          pageNumber = 1;
+          let cardlist = JSON.parse(localStorage.getItem('mh'))
+          state.modernHorizons = {}
+          Object.assign(state.modernHorizons, {page1: cardlist.cards.slice(0, 27)})
+          Object.assign(state.modernHorizons, {page2: cardlist.cards.slice(27, 54)})
+          Object.assign(state.modernHorizons, {page3: cardlist.cards.slice(54, 81)})
+          Object.assign(state.modernHorizons, {page4: cardlist.cards.slice(81, 108)})
+          Object.assign(state.modernHorizons, {page5: cardlist.cards.slice(108, 135)})
+          Object.assign(state.modernHorizons, {page6: cardlist.cards.slice(135, 162)})
+          Object.assign(state.modernHorizons, {page7: cardlist.cards.slice(162, 189)})
+          Object.assign(state.modernHorizons, {page8: cardlist.cards.slice(189, 216)})
+          Object.assign(state.modernHorizons, {page9: cardlist.cards.slice(216, 243)})
+          Object.assign(state.modernHorizons, {page10: cardlist.cards.slice(243)})
+          localStorage.setItem('state', JSON.stringify(state))
+          displayCards(1);
       })
     })
 }
 
-if (localStorage.getItem('mh1') === null || localStorage.getItem('mh2') === null || localStorage.getItem('mh3') === null) {
+if (localStorage.getItem('mh') === null) {
   $('.card-display').text('Getting cards, please wait');
   getCards()
 } else {
-  state.modernHorizons = JSON.parse(localStorage.getItem('mh1')).cards
-  state.modernHorizons = state.modernHorizons.concat(JSON.parse(localStorage.getItem('mh2')).cards)
-  state.modernHorizons = state.modernHorizons.concat(JSON.parse(localStorage.getItem('mh3')).cards)
+  state.modernHorizons = JSON.parse(localStorage.getItem('state')).modernHorizons;
+  state.decks = JSON.parse(localStorage.getItem('state')).decks;
 }
 
 let sessionDeck = null;
 let activeDeck;
 
 $( document ).ready(function() {
+  pageNumber = 1
   sessionStorage.clear()
-  if (localStorage.getItem('state') === null) {
-    localStorage.setItem('state', JSON.stringify(state));
-  } else {
-  state.decks = JSON.parse(localStorage.getItem('state')).decks
-  }
+
   if ($('.page-count').text() === 'Page:' && state.modernHorizons){
-    $('.page-count').text('Page: 1 of 10');
-    var pageNumber = 1;
-    for (let i = 0; i < 27; i += 1) {
-      let $card = $('<div class="card"></div>')
-      let image = state.modernHorizons[i].imageUrl
-      $card.css('background-image', 'url(' + image + ')')
-      $card.attr('id', state.modernHorizons[i].name)
-      $('.card-display').append($card)
-    }
+    displayCards(1)
   }
 
-  $('.next').click(function() {
+  $(document).on('click', '.next', function() {
+    console.log('clicked')
     if (pageNumber === 10){
       return;
     }
-    let i = pageNumber * 27;
     $('.card-display').html('');
-    if (pageNumber === 9){
-      for(i; i < state.modernHorizons.length; i += 1){
-        let $card = $('<div class="card"></div>')
-      let image = state.modernHorizons[i].imageUrl
-      $card.css('background-image', 'url(' + image + ')');
-      $card.attr('id', state.modernHorizons[i].name);
-      $('.card-display').append($card);
-      }
-      pageNumber += 1;
-      $('.page-count').text('Page: ' + pageNumber + ' of 10');
-      return;
-    }
-    for( i; i < pageNumber * 27 + 27; i += 1) {
-      let $card = $('<div class="card"></div>')
-      let image = state.modernHorizons[i].imageUrl
-      $card.css('background-image', 'url(' + image + ')')
-      $card.attr('id', state.modernHorizons[i].name)
-      $('.card-display').append($card)
-    }
     pageNumber += 1;
+    displayCards(pageNumber)
     $('.page-count').text('Page: ' + pageNumber + ' of 10')
   })
 
-  $('.previous').click(function() {
+  $(document).on('click', '.previous', function() {
+    console.log('clicked')
     if (pageNumber === 1){
       return;
     }
     $('.card-display').html('');
-    if (pageNumber === 10){
-      let i = 243 - 27
-      for ( i; i < 243; i += 1) {
-        let $card = $('<div class="card"></div>')
-        let image = state.modernHorizons[i].imageUrl
-        $card.css('background-image', 'url(' + image + ')')
-        $card.attr('id', state.modernHorizons[i].name)
-        $('.card-display').append($card)
-      }
-      pageNumber -= 1;
-      $('.page-count').text('Page: ' + pageNumber + ' of 10')
-      return;
-    } 
-    let i = pageNumber * 27 - 54;
-    for ( i; i < pageNumber * 27; i += 1) {
-      let $card = $('<div class="card"></div>')
-      let image = state.modernHorizons[i].imageUrl
-      $card.css('background-image', 'url(' + image + ')')
-      $card.attr('id', state.modernHorizons[i].name)
-      $('.card-display').append($card)
-    }
     pageNumber -= 1;
+    displayCards(pageNumber);
     $('.page-count').text('Page: ' + pageNumber + ' of 10')
   })
 
@@ -421,3 +392,4 @@ $( document ).ready(function() {
   })
 
 })
+

@@ -504,7 +504,6 @@ $( document ).ready(function() {
   })
 
   $(document).on('click', '#random1', function() {
-    console.log('clicked')
     if (state.decks.deck1 === null){
       return;
     }
@@ -540,6 +539,149 @@ $( document ).ready(function() {
     $('.previous').text('')
     $('.next').text('')
     $('.page-count').text('Random Hand, Deck - 1');
+    $('.card-display').text('');
+    for(let i = 0; i < 7; i += 1){
+    let $card = $('<div class="card"></div>')
+    let image = deck[randomIndexes[i]].picture;
+    $card.css('background-image', image)
+    $card.attr('id', deck[randomIndexes[i]].name)
+    $('.card-display').append($card)
+    deck = deck.slice(0, randomIndexes[i]).concat(deck.slice(randomIndexes[i] + 1))
+    }
+  })
+
+  $(document).on('click', '#random2', function() {
+    if (state.decks.deck2 === null){
+      return;
+    }
+    let deck = []
+    let cards = state.decks.deck2;
+    for(key in cards){
+      if(cards[key].quantity === 1){
+        deck.push(cards[key])
+      }
+      if(cards[key].quantity === 2){
+        deck.push(cards[key])
+        deck.push(cards[key])
+      }
+      if(cards[key].quantity === 3){
+        deck.push(cards[key])
+        deck.push(cards[key])
+        deck.push(cards[key])
+      }
+      if(cards[key].quantity === 4){
+        deck.push(cards[key])
+        deck.push(cards[key])
+        deck.push(cards[key])
+        deck.push(cards[key])
+      }
+    }
+    let randomIndexes = [Math.floor(Math.random() * Math.floor(deck.length))]
+    randomIndexes.push(Math.floor(Math.random() * Math.floor(deck.length - 1)))
+    randomIndexes.push(Math.floor(Math.random() * Math.floor(deck.length - 2)))
+    randomIndexes.push( Math.floor(Math.random() * Math.floor(deck.length - 3)))
+    randomIndexes.push(Math.floor(Math.random() * Math.floor(deck.length - 4)))
+    randomIndexes.push(Math.floor(Math.random() * Math.floor(deck.length - 5)))
+    randomIndexes.push(Math.floor(Math.random() * Math.floor(deck.length - 6)))
+    $('.previous').text('')
+    $('.next').text('')
+    $('.page-count').text('Random Hand, Deck - 2');
+    $('.card-display').text('');
+    for(let i = 0; i < 7; i += 1){
+    let $card = $('<div class="card"></div>')
+    let image = deck[randomIndexes[i]].picture;
+    $card.css('background-image', image)
+    $card.attr('id', deck[randomIndexes[i]].name)
+    $('.card-display').append($card)
+    deck = deck.slice(0, randomIndexes[i]).concat(deck.slice(randomIndexes[i] + 1))
+    }
+  })
+
+  $(document).on('click', '#random3', function() {
+    console.log('clicked')
+    if (state.decks.deck3 === null){
+      return;
+    }
+    let deck = []
+    let cards = state.decks.deck3;
+    for(key in cards){
+      if(cards[key].quantity === 1){
+        deck.push(cards[key])
+      }
+      if(cards[key].quantity === 2){
+        deck.push(cards[key])
+        deck.push(cards[key])
+      }
+      if(cards[key].quantity === 3){
+        deck.push(cards[key])
+        deck.push(cards[key])
+        deck.push(cards[key])
+      }
+      if(cards[key].quantity === 4){
+        deck.push(cards[key])
+        deck.push(cards[key])
+        deck.push(cards[key])
+        deck.push(cards[key])
+      }
+    }
+    let randomIndexes = [Math.floor(Math.random() * Math.floor(deck.length))]
+    randomIndexes.push(Math.floor(Math.random() * Math.floor(deck.length - 1)))
+    randomIndexes.push(Math.floor(Math.random() * Math.floor(deck.length - 2)))
+    randomIndexes.push( Math.floor(Math.random() * Math.floor(deck.length - 3)))
+    randomIndexes.push(Math.floor(Math.random() * Math.floor(deck.length - 4)))
+    randomIndexes.push(Math.floor(Math.random() * Math.floor(deck.length - 5)))
+    randomIndexes.push(Math.floor(Math.random() * Math.floor(deck.length - 6)))
+    $('.previous').text('')
+    $('.next').text('')
+    $('.page-count').text('Random Hand, Deck - 3');
+    $('.card-display').text('');
+    for(let i = 0; i < 7; i += 1){
+    let $card = $('<div class="card"></div>')
+    let image = deck[randomIndexes[i]].picture;
+    $card.css('background-image', image)
+    $card.attr('id', deck[randomIndexes[i]].name)
+    $('.card-display').append($card)
+    deck = deck.slice(0, randomIndexes[i]).concat(deck.slice(randomIndexes[i] + 1))
+    }
+  })
+
+  $(document).on('click', '#random4', function() {
+    console.log('clicked')
+    if (state.decks.deck4 === null){
+      return;
+    }
+    let deck = []
+    let cards = state.decks.deck4;
+    for(key in cards){
+      if(cards[key].quantity === 1){
+        deck.push(cards[key])
+      }
+      if(cards[key].quantity === 2){
+        deck.push(cards[key])
+        deck.push(cards[key])
+      }
+      if(cards[key].quantity === 3){
+        deck.push(cards[key])
+        deck.push(cards[key])
+        deck.push(cards[key])
+      }
+      if(cards[key].quantity === 4){
+        deck.push(cards[key])
+        deck.push(cards[key])
+        deck.push(cards[key])
+        deck.push(cards[key])
+      }
+    }
+    let randomIndexes = [Math.floor(Math.random() * Math.floor(deck.length))]
+    randomIndexes.push(Math.floor(Math.random() * Math.floor(deck.length - 1)))
+    randomIndexes.push(Math.floor(Math.random() * Math.floor(deck.length - 2)))
+    randomIndexes.push( Math.floor(Math.random() * Math.floor(deck.length - 3)))
+    randomIndexes.push(Math.floor(Math.random() * Math.floor(deck.length - 4)))
+    randomIndexes.push(Math.floor(Math.random() * Math.floor(deck.length - 5)))
+    randomIndexes.push(Math.floor(Math.random() * Math.floor(deck.length - 6)))
+    $('.previous').text('')
+    $('.next').text('')
+    $('.page-count').text('Random Hand, Deck - 4');
     $('.card-display').text('');
     for(let i = 0; i < 7; i += 1){
     let $card = $('<div class="card"></div>')

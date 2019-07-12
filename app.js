@@ -97,9 +97,10 @@ $( document ).ready(function() {
   }
 
   $(document).on('click', '.next', function() {
-    if(state.modernHorizons.page7 === undefined) {
+    if(state.modernHorizons.page7.length === 0) {
+      console.log('here, state')
       let cardlist = JSON.parse(localStorage.getItem('mh'))
-      state.modernHorizons = {}
+      Object.assign(state.modernHorizons, {page6: cardlist.cards.slice(135, 162)})
       Object.assign(state.modernHorizons, {page7: cardlist.cards.slice(162, 189)})
       Object.assign(state.modernHorizons, {page8: cardlist.cards.slice(189, 216)})
       Object.assign(state.modernHorizons, {page9: cardlist.cards.slice(216, 243)})
@@ -244,10 +245,11 @@ $( document ).ready(function() {
       $('.name-and-quantity').html('');
       if ($('.previous').text() === '') {
         $('.card-display').html('');
-
+        console.log('here')
       }
       for (key in sessionDeck) {
         if ($('.previous').text() === ''){
+          console.log('here2')
           let $card = $('<div class="card"></div>')
           $card.css('background-image', sessionDeck[key].picture);
           $card.attr('id', sessionDeck[key].name)
@@ -276,7 +278,6 @@ $( document ).ready(function() {
     console.log(name)
     if (name.split(' ').includes('Forest') || name.split(' ').includes('Mountain') || name.split(' ').includes('Island') || name.split(' ').includes('Swamp') || name.split(' ').includes('Plains')) {
       sessionDeck[name].quantity += 1;
-      $('.card-display').html('');
       $('.add').html('');
       $('.subtract').html('');
       $('.name-and-quantity').html('');
@@ -284,14 +285,10 @@ $( document ).ready(function() {
         let $cardName = $('<div class="card-in-deck"></div>');
         let $plus = $('<button class="plus">+</button>');
         let $minus = $('<button class="minus">-</button>');
-        let $card = $('<div class="card"></div>')
         $cardName.attr('id', 'deck' + sessionDeck[key].name)
         $minus.attr('id', 'minus-' + sessionDeck[key].name);
         $plus.attr('id', 'plus-' + sessionDeck[key].name);
-        $card.css('background-image', sessionDeck[key].picture);
-        $card.attr('id', sessionDeck[key].name)
         $cardName.text(sessionDeck[key].name + ' x' + sessionDeck[key].quantity)
-        $('.card-display').append($card)
         $('.name-and-quantity').append($cardName);
         $('.add').append($plus);
         $('.subtract').append($minus)
@@ -304,7 +301,6 @@ $( document ).ready(function() {
     }
     if (sessionDeck[name].quantity < 4) {
       sessionDeck[name].quantity += 1;
-      $('.card-display').html('');
       $('.add').html('');
       $('.subtract').html('');
       $('.name-and-quantity').html('');
@@ -312,14 +308,10 @@ $( document ).ready(function() {
         let $cardName = $('<div class="card-in-deck"></div>');
         let $plus = $('<button class="plus">+</button>');
         let $minus = $('<button class="minus">-</button>');
-        let $card = $('<div class="card"></div>')
         $cardName.attr('id', 'deck' + sessionDeck[key].name)
         $minus.attr('id', 'minus-' + sessionDeck[key].name);
         $plus.attr('id', 'plus-' + sessionDeck[key].name);
-        $card.css('background-image', sessionDeck[key].picture);
-        $card.attr('id', sessionDeck[key].name)
         $cardName.text(sessionDeck[key].name + ' x' + sessionDeck[key].quantity)
-        $('.card-display').append($card)
         $('.name-and-quantity').append($cardName);
         $('.add').append($plus);
         $('.subtract').append($minus)

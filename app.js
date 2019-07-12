@@ -175,7 +175,9 @@ $( document ).ready(function() {
       $('#' + id).remove();
       $plusId.remove();
       $(this).remove(); 
-      $cardId.remove()
+      if($('.previous').text() === ""){
+        $cardId.remove()
+      }
       delete sessionDeck[name]
       sessionStorage.setItem('sessionDeck', JSON.stringify(sessionDeck))
       if (activeDeck !== undefined) {

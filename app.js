@@ -81,8 +81,8 @@ if (localStorage.getItem('mh') === null) {
   Object.assign(state.modernHorizons, {page8: cardlist.cards.slice(189, 216)})
   Object.assign(state.modernHorizons, {page9: cardlist.cards.slice(216, 243)})
   Object.assign(state.modernHorizons, {page10: cardlist.cards.slice(243)})
-  localStorage.setItem('state', JSON.stringify(state))
   state.decks = JSON.parse(localStorage.getItem('state')).decks;
+  localStorage.setItem('state', JSON.stringify(state))
 }
 
 let sessionDeck = null;
@@ -215,7 +215,6 @@ $( document ).ready(function() {
     console.log(name)
     if (sessionDeck[name].quantity > 1) {
       sessionDeck[name].quantity -= 1;
-      $('.card-display').html('');
       $('.add').html('');
       $('.subtract').html('');
       $('.name-and-quantity').html('');
@@ -223,14 +222,10 @@ $( document ).ready(function() {
         let $cardName = $('<div class="card-in-deck"></div>');
         let $plus = $('<button class="plus">+</button>');
         let $minus = $('<button class="minus">-</button>');
-        let $card = $('<div class="card"></div>')
         $cardName.attr('id', 'deck' + sessionDeck[key].name)
         $minus.attr('id', 'minus-' + sessionDeck[key].name);
         $plus.attr('id', 'plus-' + sessionDeck[key].name);
-        $card.css('background-image', sessionDeck[key].picture);
-        $card.attr('id', sessionDeck[key].name)
         $cardName.text(sessionDeck[key].name + ' x' + sessionDeck[key].quantity)
-        $('.card-display').append($card)
         $('.name-and-quantity').append($cardName);
         $('.add').append($plus);
         $('.subtract').append($minus)
@@ -247,9 +242,12 @@ $( document ).ready(function() {
       $('.add').html('');
       $('.subtract').html('');
       $('.name-and-quantity').html('');
+      if ($('.previous').text() === '') {
+        $('.card-display').html('');
+
+      }
       for (key in sessionDeck) {
         if ($('.previous').text() === ''){
-          $('.card-display').html('');
           let $card = $('<div class="card"></div>')
           $card.css('background-image', sessionDeck[key].picture);
           $card.attr('id', sessionDeck[key].name)
@@ -539,6 +537,8 @@ $( document ).ready(function() {
     randomIndexes.push(Math.floor(Math.random() * Math.floor(deck.length - 4)))
     randomIndexes.push(Math.floor(Math.random() * Math.floor(deck.length - 5)))
     randomIndexes.push(Math.floor(Math.random() * Math.floor(deck.length - 6)))
+    $('.previous').text('')
+    $('.next').text('')
     $('.page-count').text('Random Hand, Deck - 1');
     $('.card-display').text('');
     for(let i = 0; i < 7; i += 1){

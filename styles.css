@@ -41,7 +41,7 @@ body {
 
 .card-display {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     flex-wrap: wrap;
     margin: 10px;
     width: 50%;
@@ -81,6 +81,7 @@ body {
     text-align: center;
     font-size: 24px;
     background-color: dimgray;
+    margin-bottom: 5px;
 }
 
 .set-check {
@@ -182,12 +183,15 @@ body {
 .minus {
     background-color: #03120B;
     color: white;
+    font-weight: bold;
 }
 
 .plus {
     background-color: #03120B;
     color: white;
+    font-weight: bold;
 }
+
 
 
 

@@ -1,3 +1,7 @@
+body {
+    background-color: #03120B;
+}
+
 .head {
     justify-content: center;
     align-items: center;
@@ -15,6 +19,7 @@ body {
 }
 
 .main-title {
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 100px;
     color: white;
     margin-top: 100px;
@@ -32,7 +37,6 @@ body {
 .main-container {
     display: flex;
     justify-content: space-between;
-    background-color:#e6e8eb
 }
 
 .card-display {
@@ -41,13 +45,11 @@ body {
     flex-wrap: wrap;
     margin: 10px;
     width: 50%;
-    border: solid black;
 }
 
 .deck-container {
     margin: 10px;
     width: 20%;
-    border: solid black;
     height: 100%;
 }
 
@@ -58,17 +60,24 @@ body {
 }
 
 .tool-button {
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
     margin: 2px;
-    font-size: 12px;
+    font-size: 13px;
+    background-color: #03120B;
 }
 
 .set-title {
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
     text-align: center;
     font-size: 24px;
     background-color: dimgray
 }
 
 .deck-title {
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
     text-align: center;
     font-size: 24px;
     background-color: dimgray;
@@ -79,7 +88,11 @@ body {
 }
 
 .set-name {
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
     flex-wrap: wrap;
+    margin-bottom: 10px;
 }
 
 .set-container {
@@ -95,23 +108,30 @@ body {
 }
 
 .nav-bar {
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
     display: flex;
     justify-content: center;
-    background-color: #e6e8eb;
     padding-top: 10px;
 }
 
 .previous {
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 24px;
     margin-right: 250px;
+    color: white;
 }
 
 .page-count {
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
     font-size: 24px;
     margin-right: 280px;
 }
 
 .next {
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
     font-size: 24px;
 }
 
@@ -125,6 +145,8 @@ body {
     flex-direction: column;
     width: 10%;
     font-weight: bold;
+    background-color: #03120B;
+    color: white;
 }
 
 .subtract {
@@ -132,21 +154,40 @@ body {
     flex-direction: column;
     width: 10%;
     font-weight: bold;
+    background-color: #03120B;
+    color: white;
 }
 
 .name-and-quantity {
+    font-family: Arial, Helvetica, sans-serif;
     display: flex;
     flex-direction: column;
-    width: 75%
+    width: 75%;
+    background-color: #03120B;
+    color: white;
 }
 
 .deck {
+    color: white;
     font-size: 20px;
 }
 
 .sub-title {
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 48px;
     text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
     color: white;
 }
+
+.minus {
+    background-color: #03120B;
+    color: white;
+}
+
+.plus {
+    background-color: #03120B;
+    color: white;
+}
+
+
 
